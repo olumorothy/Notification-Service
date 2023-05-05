@@ -5,7 +5,6 @@ const logger = require("../resources/logs/logger");
 const { ERROR_MSG } = require("../resources/constant");
 
 async function sendBorrowBookEmail(userData, bookData, borrowedBookData) {
-  console.log("sending email has been called");
   const borrowedBookEmailTemplate = pug.compileFile(
     "templates/borrowBookEMail.pug"
   );

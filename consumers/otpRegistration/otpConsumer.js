@@ -1,16 +1,19 @@
 const { Kafka } = require("kafkajs");
-const { sendBorrowBookEmail } = require("../notifications/borrowedBookEmail");
-const logger = require("../resources/logs/logger");
+
+const {
+  sendRegistrationOtp,
+} = require("../../notifications/userRegistrationemail");
+const logger = require("../../resources/logs/logger");
 
 const clientId = "lms-consumer";
 
 const brokers = ["localhost:9092"];
-const topic = "email";
+const topic = "otp";
 const kafka = new Kafka({ clientId, brokers });
 
 const consumer = kafka.consumer({ groupId: clientId });
 
-const consume = async () => {
+const otpConsumer = async () => {
   try {
     await consumer.connect();
   } catch (connectionError) {
@@ -27,10 +30,10 @@ const consume = async () => {
     await consumer.run({
       eachMessage: ({ message }) => {
         const deserializedMessage = JSON.parse(message.value.toString());
-        const userData = deserializedMessage.userData;
-        const bookData = deserializedMessage.bookData;
-        const borrowedBookData = deserializedMessage.borrowedBook;
-        sendBorrowBookEmail(userData, bookData, borrowedBookData);
+        const firstname = deserializedMessage.firstname;
+        const email = deserializedMessage.email;
+        const otp = deserializedMessage.OTP;
+        sendRegistrationOtp(email, firstname, otp);
       },
     });
   } catch (consumerError) {
@@ -38,4 +41,4 @@ const consume = async () => {
   }
 };
 
-module.exports = consume;
+module.exports = otpConsumer;
