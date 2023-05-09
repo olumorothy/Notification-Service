@@ -1,9 +1,10 @@
 const { Kafka } = require("kafkajs");
-const {
-  sendBorrowBookEmail,
-} = require("../../notifications/borrowedBookEmail");
-const logger = require("../../resources/logs/logger");
+const { sendBorrowBookEmail } = require("../notifications/borrowedBookEmail");
 
+const logger = require("../resources/logs/logger");
+const {
+  sendRegistrationOtp,
+} = require("../notifications/userRegistrationemail");
 const topic = "email";
 const clientId = "lms-consumer";
 
@@ -30,10 +31,20 @@ const RegistrationEmailConsumer = async () => {
     await consumer.run({
       eachMessage: ({ message }) => {
         const deserializedMessage = JSON.parse(message.value.toString());
-        const userData = deserializedMessage.userData;
-        const bookData = deserializedMessage.bookData;
-        const borrowedBookData = deserializedMessage.borrowedBook;
-        sendBorrowBookEmail(userData, bookData, borrowedBookData);
+        const { messageType } = deserializedMessage;
+
+        if (messageType === "bookBorrowed") {
+          const userData = deserializedMessage.userData;
+          const bookData = deserializedMessage.bookData;
+          const borrowedBookData = deserializedMessage.borrowedBook;
+          sendBorrowBookEmail(userData, bookData, borrowedBookData);
+        }
+        if (messageType === "userSignup") {
+          const firstname = deserializedMessage.firstname;
+          const email = deserializedMessage.email;
+          const otp = deserializedMessage.OTP;
+          sendRegistrationOtp(email, firstname, otp);
+        }
       },
     });
   } catch (consumerError) {

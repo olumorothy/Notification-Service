@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:regConsumer": "node ./consumers/borrowedBookConsumer/index.js",
-    "start:otpConsumer": "node ./consumers/otpRegistration/index.js"
+    "start:consumer": "node ./consumers/index.js"
   },
   "repository": {
     "type": "git",
