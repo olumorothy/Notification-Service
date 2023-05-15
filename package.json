@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:consumer": "node ./consumer/index.js"
+    "start:consumer": "node ./consumers/index.js"
   },
   "repository": {
     "type": "git",

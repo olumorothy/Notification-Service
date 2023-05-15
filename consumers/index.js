@@ -1,8 +1,8 @@
 require("dotenv").config();
 const { ERROR_MSG } = require("../resources/constant");
 const logger = require("../resources/logs/logger");
-const consume = require("./consumer");
+const RegistrationEmailConsumer = require("./consumer");
 
-consume().catch((err) => {
+RegistrationEmailConsumer().catch((err) => {
   logger.error(ERROR_MSG, err);
 });

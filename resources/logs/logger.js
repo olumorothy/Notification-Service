@@ -1,6 +1,6 @@
 const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, label, prettyPrint } = format;
-
+const CATEGORY = "Logs";
 const logger = createLogger({
   level: "debug",
   format: combine(
